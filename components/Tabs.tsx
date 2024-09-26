@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   FadeInRight,
   FadeOutRight,
+  LayoutAnimationConfig,
   LinearTransition,
 } from "react-native-reanimated";
 
@@ -14,6 +15,7 @@ type IconNames = keyof typeof icons;
 export type TabItem = {
   icon: IconNames;
   label: string;
+  color?: string;
 };
 
 type TabsProps = {
@@ -35,7 +37,7 @@ export function Tabs({
   activeBackgroundColor = "#ecedee",
   inactiveBackgroundColor = "#151718",
   activeColor = "#151718",
-  inactiveColor = "#3a3f42",
+  inactiveColor = "#787f85",
 }: TabsProps) {
   return (
     <View style={styles.tabsContainer}>
@@ -63,15 +65,21 @@ export function Tabs({
                   color: isSelected ? activeColor : inactiveColor,
                 }}
               />
-              {isSelected && (
-                <Animated.Text
-                  entering={FadeInRight.springify().damping(80).stiffness(200)}
-                  exiting={FadeOutRight.springify().damping(80).stiffness(200)}
-                  style={[styles.tabText, { color: activeColor }]}
-                >
-                  {item.label}
-                </Animated.Text>
-              )}
+              <LayoutAnimationConfig skipEntering>
+                {isSelected && (
+                  <Animated.Text
+                    entering={FadeInRight.springify()
+                      .damping(80)
+                      .stiffness(200)}
+                    exiting={FadeOutRight.springify()
+                      .damping(80)
+                      .stiffness(200)}
+                    style={[styles.tabText, { color: activeColor }]}
+                  >
+                    {item.label}
+                  </Animated.Text>
+                )}
+              </LayoutAnimationConfig>
             </Pressable>
           </MotiView>
         );
